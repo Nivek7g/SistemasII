@@ -1,0 +1,90 @@
+/* ==========================================================================
+   Estilos Personalizados - Sistema de Gestión de Caja
+   ========================================================================== */
+
+/* Variables de color para mantener consistencia */
+:root {
+    --primary-color: #212529;
+    --accent-color: #0dcaf0;
+    --bg-light: #f8f9fa;
+    --card-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+/* Estilos Generales */
+body {
+    background-color: var(--bg-light);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333333;
+}
+
+/* Barra de Navegación */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+/* Tarjetas (Cards) */
+.card {
+    border: none;
+    border-radius: 8px;
+    box-shadow: var(--card-shadow);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-header {
+    border-top-left-radius: 8px !important;
+    border-top-right-radius: 8px !important;
+    font-weight: 600;
+}
+
+/* Tablas de Datos */
+.table-responsive {
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+.table th {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(13, 202, 240, 0.05) !important;
+}
+
+/* Formas de Pago (Badges) */
+.badge {
+    padding: 0.5em 0.75em;
+    font-weight: 600;
+    border-radius: 4px;
+}
+
+/* Pantalla de Login */
+.login-container {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* Inputs de Formulario enfocados */
+.form-control:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 0.25rem rgba(13, 202, 240, 0.25);
+}
+
+/* Footer fijo o estético abajo */
+footer {
+    border-top: 1px solid #dee2e6;
+    background-color: #ffffff;
+}
