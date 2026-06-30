@@ -193,7 +193,25 @@ def api_crear_egreso():
     except Exception as e:
         db.session.rollback()
         return jsonify({"status": "error", "message": f"Error en el servidor: {str(e)}"}), 500
-
+@app.route("/crear-usuario-admin-temporal")
+def crear_usuario_temporal():
+    """Ruta temporal para forzar la creación del admin en Render gratis"""
+    try:
+        # Verificamos si ya existe para no duplicarlo
+        existe = Usuario.query.filter_by(username="admin").first()
+        if existe:
+            return "El usuario admin ya existe en la base de datos.", 200
+            
+        u = Usuario(
+            username='admin', 
+            password_hash='scrypt:32768:8:1$gw3GwaRypiOwPyWu$d472106bd7ae1576b9a755a1916d9276262c9e580209f1e6fc09c94fe8bffc84712e21053f7698e1efeb05528fce3e0e58f5ab1d8181a59a2f884157286329ca', 
+            nombre='Kevin Administrador'
+        )
+        db.session.add(u)
+        db.session.commit()
+        return "¡Usuario admin creado con éxito en la nube!", 201
+    except Exception as e:
+        return f"Error al crear el usuario: {str(e)}", 500
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
