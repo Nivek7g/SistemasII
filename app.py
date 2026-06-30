@@ -139,8 +139,10 @@ def buscar_egreso():
         else:
             egresos = Egreso.query.order_by(Egreso.fecha.desc()).all()
     return render_template("buscar.html", egresos=egresos, criterio=criterio)
+
+
 # ==========================================
-#         SERVICIOS WEB / API REST
+#          SERVICIOS WEB / API REST
 # ==========================================
 
 @app.route("/api/egresos", methods=["GET"])
@@ -193,35 +195,19 @@ def api_crear_egreso():
     except Exception as e:
         db.session.rollback()
         return jsonify({"status": "error", "message": f"Error en el servidor: {str(e)}"}), 500
-@app.route("/crear-usuario-admin-temporal")
-def crear_usuario_temporal():
-    """Ruta temporal para forzar la creación del admin en Render gratis"""
-    try:
-        # Verificamos si ya existe para no duplicarlo
-        existe = Usuario.query.filter_by(username="admin").first()
-        if existe:
-            return "El usuario admin ya existe en la base de datos.", 200
-            
-        u = Usuario(
-            username='admin', 
-            password_hash='scrypt:32768:8:1$gw3GwaRypiOwPyWu$d472106bd7ae1576b9a755a1916d9276262c9e580209f1e6fc09c94fe8bffc84712e21053f7698e1efeb05528fce3e0e58f5ab1d8181a59a2f884157286329ca', 
-            nombre='Kevin Administrador'
-        )
-        db.session.add(u)
-        db.session.commit()
-        return "¡Usuario admin creado con éxito en la nube!", 201
-    except Exception as e:
-        return f"Error al crear el usuario: {str(e)}", 500
-        
+
+
+# --- CONFIGURACIÓN AUTOMÁTICA EN LA NUBE ---
+
 @app.route("/configurar-bd-temporal")
 def configurar_bd_temporal():
-    """Ruta temporal para insertar el admin y las formas de pago en Render"""
+    """Ruta para insertar el admin y las formas de pago correctas en Render"""
     try:
-        # 1. Insertar formas de pago si la tabla está vacía
+        # 1. Insertar formas de pago si la tabla está vacía usando 'detalle'
         if FormaPago.query.count() == 0:
-            efectivo = FormaPago(nombre="Efectivo", estado=1)
-            tarjeta = FormaPago(nombre="Tarjeta", estado=1)
-            qr = FormaPago(nombre="Código QR", estado=1)
+            efectivo = FormaPago(detalle="Efectivo", estado=1)
+            tarjeta = FormaPago(detalle="Tarjeta de Débito/Crédito", estado=1)
+            qr = FormaPago(detalle="Código QR", estado=1)
             db.session.add_all([efectivo, tarjeta, qr])
             
         # 2. Insertar usuario si no existe
@@ -234,9 +220,11 @@ def configurar_bd_temporal():
             db.session.add(u)
             
         db.session.commit()
-        return "¡Base de datos configurada con éxito en la nube!", 200
+        return "¡Base de datos configurada y formas de pago añadidas con éxito!", 200
     except Exception as e:
         db.session.rollback()
         return f"Error: {str(e)}", 500
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
